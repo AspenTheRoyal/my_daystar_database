@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="{% static 'myfirst.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+<body>
+
+<h1>{{ mycharacter.fullname }} </h1>
+  
+<p>Age: {{ mycharacter.age }} years old</p>
+<p>Species: {{ mycharacter.species}}</p>
+<p>Gender: {{ mycharacter.gender }}</p>
+<p>Orientation: {{ mycharacter.orientation }}</p>
+{% if mycharacter.allosexual == True %}
+    <p>Allosexual: Yes</p>
+{% else %}
+    <p>Allosexual: No</p>
+{% endif %}
+{% if mycharacter.role == "Subject" %}
+    <p>Role: {{ mycharacter.role }}</p>
+    <p>Subject Class: {{ mycharacter.specificRole }}</p>
+    {% if mycharacter.subjectNumber != 0 %}
+        <p>Subject Number: {{ mycharacter.subjectNumber }}</p>
+    {% else %}
+        <p>Subject Number: Haven't picked one yet</p>
+    {% endif %}
+{% else %}
+    <p>Role: {{ mycharacter.specificRole }}</p>
+{% endif %}
+<br>
+<p>Back to <a href="/character_data">All Characters</a></p>
+
+</body>
+</html>

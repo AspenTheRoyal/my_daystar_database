@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <link rel="stylesheet" href="{% static 'myfirst.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+<body>
+
+<h1>Characters</h1>
+<p><a href="/">Back to home page</a></p> <br>
+<input type="text" id="age_minimum" placeholder="Age Minimum" value="0">
+<input type="text" id="age_maximum" placeholder="Age Maximum" value="100000">
+<select name="gender" id="gender">
+  <option value="BLANK">Any</option>
+  <option value="Masculine-aligned">Masculine-aligned</option>
+  <option value="Feminine-aligned">Feminine-aligned</option>
+  <option value="Female">Female</option>
+  <option value="Male">Male</option>
+  <option value="Non-binary">Non-binary</option>
+  <option value="Other">Other</option>
+</select>
+<br><br>
+<select name="roles" id="roles">
+  <option value="ANY">Any</option>
+  <optgroup label="Subjects">
+    <option value="ANYSUBJECT">All Subjects</option>
+    <option value="Docile">Docile</option>
+    <option value="Lahde">Lahde</option>
+    <option value="Cronus">Cronus</option>
+    <option value="Halcyon">Halcyon</option>
+    <option value="Nonviable">Nonviable</option>
+  </optgroup>
+  <optgroup label="Staff">
+    <option value="ANYSTAFF">All Staff</option>
+    <option value="Scientist">Scientist</option>
+    <option value="Medical Staff">Medical Staff</option>
+    <option value="Intern">Intern</option>
+  </optgroup>
+</select>
+<select name="species" id="species">
+  <option value="ANY">Any</option>
+  <option value="Human">Human</option>
+  <option value="Non-Magical Human">Non-Magical Human</option>
+  <option value="Magical Human">Magical Human</option>
+  <option value="Kitsune">Kitsune</option>
+  <option value="Angel">Angel</option>
+  <option value="Dragon">Dragon</option>
+  <option value="Alien">Alien</option>
+  <option value="Aspect">Aspect</option>
+  <option value="Fairy">Fairy</option>
+  <option value="Hybrid">Hybrid</option>
+</select>
+<select name="orientation" id="orientation">
+  <option value="ANY">Any</option>
+  <option value="Toric">Toric</option>
+  <option value="Homoflexible">Homoflexible</option>
+  <option value="Lesbian">Lesbian</option>
+  <option value="Straight">Straight</option>
+  <option value="Bisexual (F+M)">Bisexual (F+M)</option>
+  <option value="Bisexual (F+X)">Bisexual (F+X)</option>
+  <option value="Pansexual">Pansexual</option>
+  <option value="Aroace">Aroace</option>
+  <option value="Heteroflexible">Heteroflexible</option>
+  <option value="Polyamorous">Polyamorous</option>
+  <option value="Panromantic">Panromantic</option>
+</select>
+<select name="allosexual" id="allosexual">
+  <option value="ANY">Any</option> 
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+<button onclick="filterCharacters()">Filter</button> 
+<!-- rework order of orientation -->
+{# look at my comment #}
+<!-- Display results -->
+<ul id="character_list"></ul>
+<!-- Safely embed the JSON data -->
+{{ mycharacters|json_script:"characters_data" }}
+<ul>
+  <script>
+
+function filterCharacters() {
+  const characters = JSON.parse(document.getElementById('characters_data').textContent);
+  const minAge = parseInt(document.getElementById('age_minimum').value) || 0;
+  const maxAge = parseInt(document.getElementById('age_maximum').value) || 100000;
+  const genderDropdown = document.getElementById('gender');
+  const genderSelected = genderDropdown.value;
+  const roleDropdown = document.getElementById('roles');
+  const roleSelected = roleDropdown.value;
+  const speciesDropdown = document.getElementById('species');
+  const speciesSelected = speciesDropdown.value;
+  const orientationDropdown = document.getElementById('orientation');
+  const orientationSelected = orientationDropdown.value;
+  const allosexualDropdown = document.getElementById('allosexual');
+  const allosexualSelected = allosexualDropdown.value;
+  const filtered = characters.filter(c => c.age > minAge && c.age < maxAge);
+  let filtered2; // google what the => thing does
+  let filtered3;
+  let filtered4;
+  let filtered5;
+  let filtered6;
+  if (genderSelected != "BLANK") {
+    filtered2 = filtered.filter(c => c.gender == genderSelected);
+  } else {
+    filtered2 = filtered;
+  }
+  if (roleSelected != "ANY") {
+    if (roleSelected == "ANYSTAFF") {
+      filtered3 = filtered2.filter(c => c.role == "Staff");
+    } else if (roleSelected == "ANYSUBJECT") {
+      filtered3 = filtered2.filter(c => c.role == "Subject");
+    } else {
+      filtered3 = filtered2.filter(c => c.specificRole == roleSelected);
+    }
+  } else {
+    filtered3 = filtered2;
+  }
+  if (allosexualSelected != "ANY") {
+    if (allosexualSelected == "Yes") {
+      filtered4 = filtered3.filter(c => c.allosexual == true)
+    } else {
+      filtered4 = filtered3.filter(c => c.allosexual == false)
+    }
+  } else {
+    filtered4 = filtered3;
+  }
+  if (orientationSelected != "ANY") {
+    filtered5 = filtered4.filter(c => c.orientation == orientationSelected);
+  } else {
+    filtered5 = filtered4;
+  }
+  if (speciesSelected != "ANY") {
+    if (speciesSelected == "Non-Magical Human") {
+      filtered6 = filtered5.filter(c => c.species == "Human");
+    } else if (speciesSelected == "Human") {
+      filtered6 = filtered5.filter(c => c.species == "Human" || c.species == "Magical Human");
+    } else {
+      filtered6 = filtered5.filter(c => c.species == speciesSelected);
+    }
+  } else {
+    filtered6 = filtered5;
+  }
+  console.log(filtered6);
+  const list = document.getElementById('character_list'); // google where it gets this from and how
+  list.innerHTML = '';
+
+  filtered6.forEach(c => {
+    list.innerHTML += `<li>${c.fullname} - ${c.role} (${c.specificRole}) - <a href="/details/${c.fullname}">link</a></li>`;
+  });
+  // just go thru this again
+}
+filterCharacters();
+  </script>
+</ul>
+
+</body>
+</html>
