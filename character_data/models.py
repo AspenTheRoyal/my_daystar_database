@@ -23,14 +23,17 @@ specificRolePossibilities = {
 }
 class Character(models.Model):
     fullname = models.CharField(max_length=255)
-    role = models.CharField(choices=rolePossibilities,null=True)
-    age = models.IntegerField(null=True)
-    subjectNumber = models.IntegerField(null=True)
-    gender = models.CharField(choices=genderPossibilities,null=True)
-    specificRole = models.CharField(choices=specificRolePossibilities,null=True)
-    orientation = models.CharField(null=True)
+    role = models.CharField(choices=rolePossibilities)
+    age = models.IntegerField()
+    subjectNumber = models.IntegerField()
+    gender = models.CharField(choices=genderPossibilities)
+    specificRole = models.CharField(choices=specificRolePossibilities)
+    orientation = models.CharField()
     allosexual = models.BooleanField(null=True)
-    species = models.CharField(null=True)
+    species = models.CharField()
+
+    def __str__(self):
+        return self.fullname
 
 
 # Create your models here.
