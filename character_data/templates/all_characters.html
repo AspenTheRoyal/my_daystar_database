@@ -221,11 +221,10 @@ function filterCharacters() {
   } else {
       filtered8 = filtered7;
   }
-  console.log(filtered8);
   const list = document.getElementById('character_list'); // google where it gets this from and how
   list.innerHTML = '';
 
-  filtered7.forEach(c => {
+  filtered8.forEach(c => {
     list.innerHTML += `<li>${c.fullname} - ${c.role} (${c.specificRole}) - <a href="/details/${c.fullname}">link</a></li>`;
   });
 }
