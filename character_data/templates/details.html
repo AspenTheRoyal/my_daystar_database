@@ -4,9 +4,9 @@
     <link rel="stylesheet" href="{% static 'myfirst.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
 <body>
-
+<title>{{ mycharacter.fullname }}</title>
 <h1>{{ mycharacter.fullname }} </h1>
-  
+
 <p>Age: {{ mycharacter.age }} years old</p>
 <p>Species: {{ mycharacter.species}}</p>
 <p>Gender: {{ mycharacter.gender }}</p>
@@ -27,6 +27,12 @@
 {% else %}
     <p>Role: {{ mycharacter.specificRole }}</p>
 {% endif %}
+{% if mycharacter.submitted == True %}
+    <p>Submitted: True</p>
+{% else %}
+    <p>Submitted: False</p>
+{% endif %}
+<p>Document: <a href={{ mycharacter.documentLink }}>link</a></p>
 <br>
 <p>Back to <a href="/character_data">All Characters</a></p>
 

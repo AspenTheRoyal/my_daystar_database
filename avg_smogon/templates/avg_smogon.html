@@ -4,9 +4,9 @@
 <link rel="stylesheet" href="{% static 'avg_smogon.css' %}">
 <body>
 
-<p>hi, i work! this webpage loads!!</p>
+<p>this wont work unless i pay for pythonanywhere but the actual script is on my github</p>
 
-<form action="{% url 'my_smogon_script' %}" method="post"> 
+<form action="{% url 'my_smogon_script' %}" method="post">
     {% csrf_token %}
     <input type="text" name="pokemon_input" placeholder="Enter something" required>
     <button type="submit">Click to Calculate Average Format</button>
@@ -18,7 +18,6 @@
 <br>
 {% endfor %}
 {% endif %}
-<p>Token: {{ csrf_token }}</p>
 <!-- i need to manage that hey, when you load this page, nothin gonna be there. i do think thats the problem! -->
 </body>
 </html>

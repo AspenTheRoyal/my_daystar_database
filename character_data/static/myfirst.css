@@ -5,6 +5,16 @@ body {
 }
 h1 {
     color: lime;
-    font-family: "Noto"; 
+    font-family: "Noto";
+}
+h2 {
+    color: lime;
+    font-family: "Kalam";
+}
+p {
+    color: white;
+}
+input, select {
+    background-color: LawnGreen;
 }
 /* Hi please make sure you get some fun fonts */

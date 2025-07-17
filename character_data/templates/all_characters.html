@@ -4,12 +4,32 @@
 <html>
   <link rel="stylesheet" href="{% static 'myfirst.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kalam">
 <body>
-
+<title>Aria's Characters</title>
 <h1>Characters</h1>
-<p><a href="/">Back to home page</a></p> <br>
-<input type="text" id="age_minimum" placeholder="Age Minimum" value="0">
+<p><a href="/">Back to home page</a></p>
+<p><a href="/muse">Muse info</a></p>
+<style>
+  .container {
+    display: flex;
+    align-items: center;
+  }
+
+  .container p {
+    margin-right: 10px;
+  }
+</style>
+<div class="container">
+  <p>Age minimum in years, age must be greater than or equal to the number entered - </p>
+<input type="text" id="age_minimum" placeholder="Age Minimum" value="0"><br>
+</div>
+<div class="container">
+<p>Age maximum in years, age must be less than or equal to the number entered - </p>
 <input type="text" id="age_maximum" placeholder="Age Maximum" value="100000">
+</div>
+<div class="container">
+<p>Gender selection. Non-binary covers all characters with genders not related to femininity or masculinity -
 <select name="gender" id="gender">
   <option value="BLANK">Any</option>
   <option value="Masculine-aligned">Masculine-aligned</option>
@@ -17,8 +37,10 @@
   <option value="Female">Female</option>
   <option value="Male">Male</option>
   <option value="Non-binary">Non-binary</option>
-</select>
-<br><br>
+</select></p>
+</div>
+<div class="container">
+<p>Role selection - </p>
 <select name="roles" id="roles">
   <option value="ANY">Any</option>
   <optgroup label="Subjects">
@@ -36,6 +58,9 @@
     <option value="Intern">Intern</option>
   </optgroup>
 </select>
+</div>
+<div class="container">
+  <p>Species selection, "human" will give all humans whether they have magic or not -
 <select name="species" id="species">
   <option value="ANY">Any</option>
   <option value="Human">Human</option>
@@ -44,11 +69,13 @@
   <option value="Kitsune">Kitsune</option>
   <option value="Angel">Angel</option>
   <option value="Dragon">Dragon</option>
-  <option value="Alien">Alien</option>
-  <option value="Aspect">Aspect</option>
   <option value="Fairy">Fairy</option>
   <option value="Hybrid">Hybrid</option>
-</select>
+  <option value="Other">Other</option>
+</select></p>
+</div>
+<div class="container">
+  <p>Orientation selection. Bisexual (F+X) means that character is attracted to both females and gender neutral/non-binary people -
 <select name="orientation" id="orientation">
   <option value="ANY">Any</option>
   <option value="Toric">Toric</option>
@@ -63,21 +90,59 @@
   <option value="Polyamorous">Polyamorous</option>
   <option value="Panromantic">Panromantic</option>
   <option value="Omniromantic">Omniromantic</option>
-</select>
-<select name="allosexual" id="allosexual">
-  <option value="ANY">Any</option> 
-  <option value="Yes">Yes</option>
-  <option value="No">No</option>
-</select>
-<button onclick="filterCharacters()">Filter</button> 
-<!-- rework order of orientation -->
-{# look at my comment #}
+</select></p>
+</div>
+<div class="container">
+  <p>
+    Allosexuality selection. Didn't quite get the meaning of allosexuality right, but dunno what else to call it. Yes means that the character has "normal" levels of sexual attraction, no means that the
+    character is on the ace spectrum -
+    <select name="allosexual" id="allosexual">
+      <option value="ANY">Any</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </p>
+</div>
+<div class="container">
+  <p>
+    Muse selection, the one you select is the minimum -
+    <select name="muse" id="muse">
+      <option value=1>Red</option>
+      <option value=2>Orange</option>
+      <option value=3>Yellow</option>
+      <option value=4>Green</option>
+      <option value=5>Blue</option>
+    </select>
+  </p>
+</div>
+<div class="container">
+    <p>
+        Submission status. Not super sure about Sycamore and Lilac, but I think the rest are accurate -
+        <select name="submitted" id="submitted">
+            <option value="ANY">Any</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+    </p>
+</div>
+<button onclick="filterCharacters()">Filter</button>
+<h2>character results!</h2>
 <!-- Display results -->
 <ul id="character_list"></ul>
-<!-- Safely embed the JSON data -->
+<!-- embed the JSON data -->
 {{ mycharacters|json_script:"characters_data" }}
 <ul>
   <script>
+
+function filterOtherSpecies(characters) {
+    const includedSpeciesList = ["Human", "Magical Human", "Kitsune", "Angel", "Dragon", "Fairy", "Hybrid"]
+    for (let character of characterArray) {
+        if (includedSpeciesList.indexOf(character.species) !== -1) {
+            return character;
+        }
+    }
+}
+
 
 function filterCharacters() {
   const characters = JSON.parse(document.getElementById('characters_data').textContent);
@@ -93,12 +158,18 @@ function filterCharacters() {
   const orientationSelected = orientationDropdown.value;
   const allosexualDropdown = document.getElementById('allosexual');
   const allosexualSelected = allosexualDropdown.value;
-  const filtered = characters.filter(c => c.age > minAge && c.age < maxAge);
-  let filtered2; // google what the => thing does
+  const museDropdown = document.getElementById('muse');
+  const museSelected = museDropdown.value;
+  const submittedDropdown = document.getElementById('submitted');
+  const submittedSelected = submittedDropdown.value;
+  const filtered = characters.filter(c => c.age >= minAge && c.age <= maxAge);
+  let filtered2;
   let filtered3;
   let filtered4;
   let filtered5;
   let filtered6;
+  let filtered7;
+  let filtered8;
   if (genderSelected != "BLANK") {
     filtered2 = filtered.filter(c => c.gender == genderSelected);
   } else {
@@ -140,14 +211,23 @@ function filterCharacters() {
   } else {
     filtered6 = filtered5;
   }
-  console.log(filtered6);
+  filtered7 = filtered6.filter(c => c.muse >= museSelected);
+  if (submittedSelected != "ANY") {
+    if (submittedSelected == "Yes") {
+      filtered8 = filtered7.filter(c => c.submitted == true);
+    } else {
+      filtered8 = filtered7.filter(c => c.submitted == false);
+    }
+  } else {
+      filtered8 = filtered7;
+  }
+  console.log(filtered8);
   const list = document.getElementById('character_list'); // google where it gets this from and how
   list.innerHTML = '';
 
-  filtered6.forEach(c => {
+  filtered7.forEach(c => {
     list.innerHTML += `<li>${c.fullname} - ${c.role} (${c.specificRole}) - <a href="/details/${c.fullname}">link</a></li>`;
   });
-  // just go thru this again
 }
 filterCharacters();
   </script>

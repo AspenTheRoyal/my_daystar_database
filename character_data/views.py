@@ -18,6 +18,10 @@ def details(request, fullname):
   }
   return HttpResponse(template.render(context, request))
 
+def muse(request):
+  template = loader.get_template('muse.html')
+  return HttpResponse(template.render())
+
 def main(request):
   template = loader.get_template('main.html')
   return HttpResponse(template.render())
