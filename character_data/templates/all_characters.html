@@ -87,9 +87,7 @@
   <option value="Pansexual">Pansexual</option>
   <option value="Aroace">Aroace</option>
   <option value="Heteroflexible">Heteroflexible</option>
-  <option value="Polyamorous">Polyamorous</option>
-  <option value="Panromantic">Panromantic</option>
-  <option value="Omniromantic">Omniromantic</option>
+  <option value="Other">Other</option>
 </select></p>
 </div>
 <div class="container">
@@ -134,8 +132,8 @@
 <ul>
   <script>
 
-const includedSpeciesList = ["Human", "Magical Human", "Kitsune", "Angel", "Dragon", "Fairy", "Hybrid"]
-
+const includedSpeciesList = ["Human", "Magical Human", "Kitsune", "Angel", "Dragon", "Fairy", "Hybrid","Moonling"]
+const includedOrientationList = ["Toric","Homoflexible","Lesbian","Straight","Bisexual (F+M)","Bisexual (F+X)","Pansexual","Aroace","Heteroflexible"]
 function filterCharacters() {
   const characters = JSON.parse(document.getElementById('characters_data').textContent);
   const minAge = parseInt(document.getElementById('age_minimum').value) || 0;
@@ -188,7 +186,11 @@ function filterCharacters() {
     filtered4 = filtered3;
   }
   if (orientationSelected != "ANY") {
-    filtered5 = filtered4.filter(c => c.orientation == orientationSelected);
+    if (orientationSelected == "Other") {
+        filtered5 = filtered4.filter(c => !includedOrientationList.includes(c.orientation))
+    } else {
+        filtered5 = filtered4.filter(c => c.orientation == orientationSelected);
+    }
   } else {
     filtered5 = filtered4;
   }
