@@ -1,4 +1,3 @@
 # my_daystar_database
 
-the orientations it'll take:
-toric, homoflexible, lesbian, straight, bisexual (F+M), bisexual (F+X), pansexual, aroace, heteroflexible, polyamorous, panromantic, omniromantic
+Hello! This is just a wonderful little place that stores the code for my website. This stores my characters in a database and also provides a page to filter through them in a bunch of fun ways.
