@@ -30,19 +30,16 @@ musePossibilities = {
 }
 class Character(models.Model):
     fullname = models.CharField(max_length=255)
-    role = models.CharField(choices=rolePossibilities,max_length=255)
+    role = models.CharField(choices=rolePossibilities,max_length=50)
     age = models.IntegerField()
     subjectNumber = models.IntegerField()
-    gender = models.CharField(choices=genderPossibilities,max_length=255)
-    specificRole = models.CharField(choices=specificRolePossibilities,max_length=255)
-    orientation = models.CharField(max_length=255)
-    allosexual = models.BooleanField(null=True)
-    species = models.CharField(max_length=255)
-    documentLink = models.CharField(max_length=255,null=True)
-    submitted = models.BooleanField(null=True)
-    muse = models.IntegerField(choices=musePossibilities,null=True)
+    gender = models.CharField(choices=genderPossibilities,max_length=50)
+    specificRole = models.CharField(choices=specificRolePossibilities,max_length=50)
+    orientation = models.CharField(max_length=50)
+    allosexual = models.BooleanField()
+    species = models.CharField(max_length=50)
+    documentLink = models.CharField(max_length=150)
+    submitted = models.BooleanField()
+    muse = models.IntegerField(choices=musePossibilities)
     def __str__(self):
         return self.fullname
-
-
-# Create your models here.

@@ -22,11 +22,11 @@
 </style>
 <div class="container">
   <p>Age minimum in years, age must be greater than or equal to the number entered - </p>
-<input type="text" id="age_minimum" placeholder="Age Minimum" value="0"><br>
+<input type="text" id="age_minimum" placeholder="Age Minimum" value=""><br>
 </div>
 <div class="container">
 <p>Age maximum in years, age must be less than or equal to the number entered - </p>
-<input type="text" id="age_maximum" placeholder="Age Maximum" value="100000">
+<input type="text" id="age_maximum" placeholder="Age Maximum" value="">
 </div>
 <div class="container">
 <p>Gender selection. Non-binary covers all characters with genders not related to femininity or masculinity -
@@ -87,9 +87,7 @@
   <option value="Pansexual">Pansexual</option>
   <option value="Aroace">Aroace</option>
   <option value="Heteroflexible">Heteroflexible</option>
-  <option value="Polyamorous">Polyamorous</option>
-  <option value="Panromantic">Panromantic</option>
-  <option value="Omniromantic">Omniromantic</option>
+  <option value="Other">Other</option>
 </select></p>
 </div>
 <div class="container">
@@ -134,100 +132,71 @@
 <ul>
   <script>
 
-function filterOtherSpecies(characters) {
-    const includedSpeciesList = ["Human", "Magical Human", "Kitsune", "Angel", "Dragon", "Fairy", "Hybrid"]
-    for (let character of characterArray) {
-        if (includedSpeciesList.indexOf(character.species) !== -1) {
-            return character;
-        }
-    }
-}
-
-
+const includedSpeciesList = ["Human", "Magical Human", "Kitsune", "Angel", "Dragon", "Fairy", "Hybrid","Moonling"]
+const includedOrientationList = ["Toric","Homoflexible","Lesbian","Straight","Bisexual (F+M)","Bisexual (F+X)","Pansexual","Aroace","Heteroflexible"]
 function filterCharacters() {
   const characters = JSON.parse(document.getElementById('characters_data').textContent);
   const minAge = parseInt(document.getElementById('age_minimum').value) || 0;
   const maxAge = parseInt(document.getElementById('age_maximum').value) || 100000;
-  const genderDropdown = document.getElementById('gender');
-  const genderSelected = genderDropdown.value;
-  const roleDropdown = document.getElementById('roles');
-  const roleSelected = roleDropdown.value;
-  const speciesDropdown = document.getElementById('species');
-  const speciesSelected = speciesDropdown.value;
-  const orientationDropdown = document.getElementById('orientation');
-  const orientationSelected = orientationDropdown.value;
-  const allosexualDropdown = document.getElementById('allosexual');
-  const allosexualSelected = allosexualDropdown.value;
-  const museDropdown = document.getElementById('muse');
-  const museSelected = museDropdown.value;
-  const submittedDropdown = document.getElementById('submitted');
-  const submittedSelected = submittedDropdown.value;
-  const filtered = characters.filter(c => c.age >= minAge && c.age <= maxAge);
-  let filtered2;
-  let filtered3;
-  let filtered4;
-  let filtered5;
-  let filtered6;
-  let filtered7;
-  let filtered8;
+  const genderSelected = document.getElementById('gender').value;
+  const roleSelected = document.getElementById('roles').value;
+  const speciesSelected = document.getElementById('species').value;
+  const orientationSelected = document.getElementById('orientation').value;
+  const allosexualSelected = document.getElementById('allosexual').value;
+  const museSelected = document.getElementById('muse').value;
+  const submittedSelected = document.getElementById('submitted').value;
+  let filteredList = characters.filter(c => c.age >= minAge && c.age <= maxAge);
   if (genderSelected != "BLANK") {
-    filtered2 = filtered.filter(c => c.gender == genderSelected);
-  } else {
-    filtered2 = filtered;
+    filteredList = filteredList.filter(c => c.gender == genderSelected);
   }
   if (roleSelected != "ANY") {
     if (roleSelected == "ANYSTAFF") {
-      filtered3 = filtered2.filter(c => c.role == "Staff");
+      filteredList = filteredList.filter(c => c.role == "Staff");
     } else if (roleSelected == "ANYSUBJECT") {
-      filtered3 = filtered2.filter(c => c.role == "Subject");
+      filteredList = filteredList.filter(c => c.role == "Subject");
     } else {
-      filtered3 = filtered2.filter(c => c.specificRole == roleSelected);
+      filteredList = filteredList.filter(c => c.specificRole == roleSelected);
     }
-  } else {
-    filtered3 = filtered2;
   }
   if (allosexualSelected != "ANY") {
     if (allosexualSelected == "Yes") {
-      filtered4 = filtered3.filter(c => c.allosexual == true)
+      filteredList = filteredList.filter(c => c.allosexual == true)
     } else {
-      filtered4 = filtered3.filter(c => c.allosexual == false)
+      filteredList = filteredList.filter(c => c.allosexual == false)
     }
-  } else {
-    filtered4 = filtered3;
   }
   if (orientationSelected != "ANY") {
-    filtered5 = filtered4.filter(c => c.orientation == orientationSelected);
-  } else {
-    filtered5 = filtered4;
+    if (orientationSelected == "Other") {
+        filteredList = filteredList.filter(c => !includedOrientationList.includes(c.orientation))
+    } else {
+        filteredList = filteredList.filter(c => c.orientation == orientationSelected);
+    }
   }
   if (speciesSelected != "ANY") {
     if (speciesSelected == "Non-Magical Human") {
-      filtered6 = filtered5.filter(c => c.species == "Human");
+      filteredList = filteredList.filter(c => c.species == "Human");
     } else if (speciesSelected == "Human") {
-      filtered6 = filtered5.filter(c => c.species == "Human" || c.species == "Magical Human");
+      filteredList = filteredList.filter(c => c.species == "Human" || c.species == "Magical Human");
+    } else if (speciesSelected == "Other") {
+      filteredList = filteredList.filter(c => !includedSpeciesList.includes(c.species))
     } else {
-      filtered6 = filtered5.filter(c => c.species == speciesSelected);
+      filteredList = filteredList.filter(c => c.species == speciesSelected);
     }
-  } else {
-    filtered6 = filtered5;
   }
-  filtered7 = filtered6.filter(c => c.muse >= museSelected);
+  filteredList = filteredList.filter(c => c.muse >= museSelected);
   if (submittedSelected != "ANY") {
     if (submittedSelected == "Yes") {
-      filtered8 = filtered7.filter(c => c.submitted == true);
+      filteredList = filteredList.filter(c => c.submitted == true)
     } else {
-      filtered8 = filtered7.filter(c => c.submitted == false);
+      filteredList = filteredList.filter(c => c.submitted == false)
     }
-  } else {
-      filtered8 = filtered7;
   }
-  console.log(filtered8);
   const list = document.getElementById('character_list'); // google where it gets this from and how
   list.innerHTML = '';
 
-  filtered7.forEach(c => {
+  filteredList.map(c => {
     list.innerHTML += `<li>${c.fullname} - ${c.role} (${c.specificRole}) - <a href="/details/${c.fullname}">link</a></li>`;
-  });
+  }).join('');
 }
 filterCharacters();
   </script>

@@ -27,10 +27,11 @@
 {% else %}
     <p>Role: {{ mycharacter.specificRole }}</p>
 {% endif %}
+<p>Muse: {{ mycharacter.get_muse_display }}</p>
 {% if mycharacter.submitted == True %}
-    <p>Submitted: True</p>
+    <p>Submitted: Yes</p>
 {% else %}
-    <p>Submitted: False</p>
+    <p>Submitted: No</p>
 {% endif %}
 <p>Document: <a href={{ mycharacter.documentLink }}>link</a></p>
 <br>
